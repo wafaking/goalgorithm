@@ -43,16 +43,51 @@ func (sq *SingleLink) GetElem(i int) *Node {
 	}
 	var (
 		num  int
-		node = sq.Data
+		node *Node
 	)
+
 	for {
-		if num == i-1 {
+		if num == i {
 			break
 		}
-		node = node.Next
+		if num == 0 {
+			node = sq.Data
+		} else {
+			node = node.Next
+		}
 		num++
 	}
 	return node
+}
+
+func (sq *SingleLink) ClearList() {
+	if sq.Size == 0 {
+		return
+	}
+	sq.Size = 0
+	sq.Data = nil
+	return
+}
+
+func (sq *SingleLink) ListEmpty() bool {
+	return sq.Size == 0
+}
+
+func (sq *SingleLink) LocateElem(node Node) int {
+	var index = -1
+
+	if sq.Size == 0 {
+		return index
+	}
+
+	for num := 0; num < sq.Size; num++ {
+		var inode *Node
+		if num == 0 {
+
+		}
+	}
+
+	return index
 }
 
 // func (sq *SingleLink) Remove(i int) (bool, *Node) {
