@@ -5,14 +5,14 @@ package list
 */
 
 type SqSingleListOPeration interface {
-	InitList() *SingleLink     // 初始化
-	ListEmpty() bool           // 判断是否为空,true/false
-	ClearList()                // 清空
-	GetElem(i int) *Node       // 获取元素
-	LocateElem(Node) int       // 查找元素位置
-	ListInsert(int, Node) bool // 插入
-	Remove(int) (bool, *Node)  // 删除
-	Length() int               // 长度
+	InitList() *SingleLink      // 初始化
+	ListEmpty() bool            // 判断是否为空,true/false
+	ClearList()                 // 清空
+	GetElem(i int) *Node        // 获取元素
+	LocateElem(Node) int        // 查找元素位置
+	ListInsert(int, *Node) bool // 插入
+	Remove(int) (bool, *Node)   // 删除
+	Length() int                // 长度
 }
 
 // Node 单结构
@@ -75,39 +75,79 @@ func (sq *SingleLink) ListEmpty() bool {
 
 func (sq *SingleLink) LocateElem(node Node) int {
 	var index = -1
-
 	if sq.Size == 0 {
 		return index
 	}
 
+	var inode = sq.Data
 	for num := 0; num < sq.Size; num++ {
-		var inode *Node
-		if num == 0 {
-
+		num++
+		if node != *inode {
+			inode = inode.Next
+			continue
 		}
+		index = num
 	}
-
 	return index
 }
 
-// func (sq *SingleLink) Remove(i int) (bool, *Node) {
-// 	if sq.Size <= i || i <= 0 {
-// 		return false, nil
-// 	}
+func (sq *SingleLink) Remove(i int) (bool, *Node) {
+	var (
+		hasRomoved bool
+		rNode      *Node
+	)
+	if sq.Size <= i || i <= 0 {
+		return hasRomoved, rNode
+	}
 
-// 	var (
-// 		num  int
-// 		node *Node
-// 	)
-// 	for num := 0; num < i; num++ {
+	var inode = sq.Data
 
-// 		if num == i-1 {
-// 			// node =
-// 			break
-// 		}
-// 		num++
-// 	}
-// 	sq.Size--
+	for num := 0; num < i; num++ {
+		num++
+		curNode := inode
+		if num != i {
+			inode = inode.Next
+			continue
+		}
+		curNode.Next = inode.Next
+		rNode = inode
+		hasRomoved = true
+		sq.Size--
+	}
+	return hasRomoved, rNode
+}
 
-// 	return true, nil
-// }
+func (sq *SingleLink) ListInsert(pos int, node *Node) bool {
+	var isInsert bool
+
+	if pos > sq.Size+1 || pos <= 0 || node == nil {
+		return isInsert
+	}
+	// if pos == 0 {
+	// 	node.Next = sq.Data
+	// 	isInsert = true
+	// 	return isInsert
+	// }
+	if pos == sq.Size+1 {
+		lastNode := sq.GetElem(sq.Size)
+		lastNode.Next = node
+		isInsert = true
+		return isInsert
+	}
+
+	var iNode = sq.Data
+	for i := 0; i < sq.Size; i++ {
+		i++
+		curNode := iNode
+		if i != pos {
+			iNode = iNode.Next
+			continue
+		}
+		node.Next = iNode
+		curNode.Next = node
+		sq.Size++
+		isInsert = true
+	}
+
+	return isInsert
+}
