@@ -5,14 +5,17 @@ package list
 */
 
 type SqSingleListOPeration interface {
-	InitList() *SingleLink      // 初始化
-	ListEmpty() bool            // 判断是否为空,true/false
-	ClearList()                 // 清空
-	GetElem(i int) *Node        // 获取元素
-	LocateElem(Node) int        // 查找元素位置
-	ListInsert(int, *Node) bool // 插入
-	Remove(int) (bool, *Node)   // 删除
-	Length() int                // 长度
+	InitList() *SingleLink                  // 初始化
+	IsEmpty() bool                          // 判断是否为空,true/false
+	Length() int                            // 长度
+	ClearList()                             // 清空
+	GetElem(i int) *Node                    // 获取元素
+	LocateElem(Node) int                    // 查找元素位置
+	Add(data string) bool                   // 头部插入
+	Append(data string) bool                // 尾部插入
+	ListInsert(index int, data string) bool // 插入
+	Remove(int) (bool, *Node)               // 删除
+	CreateSingleList(length int)            // 创建一个指定长度的随机单链表
 }
 
 // Node 单结构
@@ -27,7 +30,11 @@ type SingleLink struct {
 }
 
 func (sq *SingleLink) InitList() *SingleLink {
-	return &SingleLink{}
+	return new(SingleLink)
+}
+
+func (sq *SingleLink) IsEmpty() bool {
+	return sq.Length() == 0
 }
 
 func (sq *SingleLink) Length() (length int) {
@@ -35,6 +42,77 @@ func (sq *SingleLink) Length() (length int) {
 		return
 	}
 	return sq.Size
+}
+
+func (sq *SingleLink) Add(data string) bool {
+	added := true
+	node := &Node{Data: data}
+	if sq.IsEmpty() {
+		sq.Data = node
+		sq.Size++
+		return added
+	}
+
+	node.Next = sq.Data
+	sq.Data = node
+	sq.Size++
+	return added
+}
+
+func (sq *SingleLink) Append(data string) bool {
+	added := true
+	node := &Node{Data: data}
+	if sq.IsEmpty() {
+		sq.Data = node
+		sq.Size++
+		return added
+	}
+
+	cur := sq.Data
+	for cur.Next != nil {
+		cur = cur.Next
+	}
+
+	return added
+}
+
+func (sq *SingleLink) ListInsert(pos int, data string) bool {
+
+	var isInsert bool
+
+	node := &Node{Data: data}
+	if sq.IsEmpty() {
+		sq.Data = node
+		sq.Size++
+		return true
+	}
+
+	if pos <= 0 { // 头部插入
+		node.Next = sq.Data
+		sq.Data = node
+		sq.Size++
+	} else if pos > sq.Size { // 尾部插入
+		lastNode := sq.GetElem(sq.Size)
+		lastNode.Next = node
+		isInsert = true
+		return isInsert
+	}
+
+	var iNode = sq.Data
+	for i := 0; i < sq.Size; i++ {
+		i++
+		curNode := iNode
+		if i != pos {
+			iNode = iNode.Next
+			continue
+		}
+		node.Next = iNode
+		curNode.Next = node
+		sq.Size++
+		isInsert = true
+	}
+
+	return isInsert
 }
 
 func (sq *SingleLink) GetElem(i int) *Node {
@@ -67,10 +145,6 @@ func (sq *SingleLink) ClearList() {
 	sq.Size = 0
 	sq.Data = nil
 	return
-}
-
-func (sq *SingleLink) ListEmpty() bool {
-	return sq.Size == 0
 }
 
 func (sq *SingleLink) LocateElem(node Node) int {
@@ -115,39 +189,4 @@ func (sq *SingleLink) Remove(i int) (bool, *Node) {
 		sq.Size--
 	}
 	return hasRomoved, rNode
-}
-
-func (sq *SingleLink) ListInsert(pos int, node *Node) bool {
-	var isInsert bool
-
-	if pos > sq.Size+1 || pos <= 0 || node == nil {
-		return isInsert
-	}
-	// if pos == 0 {
-	// 	node.Next = sq.Data
-	// 	isInsert = true
-	// 	return isInsert
-	// }
-	if pos == sq.Size+1 {
-		lastNode := sq.GetElem(sq.Size)
-		lastNode.Next = node
-		isInsert = true
-		return isInsert
-	}
-
-	var iNode = sq.Data
-	for i := 0; i < sq.Size; i++ {
-		i++
-		curNode := iNode
-		if i != pos {
-			iNode = iNode.Next
-			continue
-		}
-		node.Next = iNode
-		curNode.Next = node
-		sq.Size++
-		isInsert = true
-	}
-
-	return isInsert
 }
