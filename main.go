@@ -31,8 +31,8 @@ func main() {
 			G2(&wg, stop)
 		}()
 	}
-	// go G3(&wg, stop)
-	// go G4(&wg, stop)
+	go G3(&wg, stop)
+	go G4(&wg, stop)
 
 	go func() {
 		signal.Notify(ch1, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM)
