@@ -37,6 +37,7 @@ func (sq *SingleLink) Length() (length int) {
 	return sq.Size
 }
 
+// TODO 参考书上
 func (sq *SingleLink) GetElem(i int) *Node {
 	if sq.Size <= i || i <= 0 {
 		return nil
