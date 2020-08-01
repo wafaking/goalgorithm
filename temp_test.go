@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 	"testing"
+	"time"
 )
 
 func TestFunc(t *testing.T) {
@@ -25,6 +26,7 @@ func TestFunc2(t *testing.T) {
 	for _, v := range sli {
 		wg.Add(1)
 		fmt.Println("v: ", v)
+		time.Sleep(time.Second)
 		go func() {
 			fmt.Printf("name: %s\n", v)
 			wg.Done()
@@ -84,4 +86,87 @@ func c() (i int) {
 		i++
 	}()
 	return 1
+}
+
+func TestNamedOrNotReturnFunc(t *testing.T) {
+	val1 := NamedReturnFunc()
+	fmt.Printf("var1: %d\n", val1) // 5
+
+	val3 := NonNamedReturnFunc()
+	fmt.Printf("var3: %d\n", val3) // 99
+}
+
+func NamedReturnFunc() (val1 int32) {
+	defer func() {
+		val1 = 5
+	}()
+
+	val1 = 99
+	fmt.Printf("NamedReturnFunc return, val1: %d\n", val1) // 99
+	return
+}
+
+func NonNamedReturnFunc() int {
+	var val1 int
+	defer func() {
+		val1 = 5
+	}()
+
+	val1 = 99
+	fmt.Printf("NonNamedReturnFunc return, val1: %d\n", val1) // 99
+	return val1
+}
+
+func TestSumFunc(t *testing.T) {
+	var sli = []int{1, 2, 7, 11, 15, 8}
+	var total = 9
+	// res := SumFunc1(sli, total)
+	res := SumFunc2(sli, total)
+	// res := SumFunc3(sli, total)
+	fmt.Println("res: ", res)
+}
+
+func SumFunc1(nums []int, val int) []string {
+	pair := []string{}
+	length := len(nums)
+	for i := 0; i < length-1; i++ {
+		for j := i + 1; j <= length-1; j++ {
+			if val == nums[i]+nums[j] {
+				pair = append(pair, fmt.Sprintf("%d,%d", nums[i], nums[j]))
+			}
+		}
+	}
+	return pair
+}
+
+func SumFunc2(nums []int, val int) []string {
+	pair := []string{}
+	var myMap = make(map[int]int, 0)
+	for k, v := range nums {
+		myMap[v] = k
+	}
+
+	for _, v := range nums {
+		res := val - v
+		if _, ok := myMap[res]; ok {
+			pair = append(pair, fmt.Sprintf("%d,%d", v, res))
+		}
+	}
+
+	return pair
+}
+
+func SumFunc3(nums []int, val int) []string {
+	pair := []string{} // 存放结果
+	length := len(nums)
+	mymap := make(map[int]int, length) // 存放差值
+	for k, v := range nums {
+		res := val - v
+		if _, ok := mymap[res]; !ok {
+			mymap[v] = k
+		} else {
+			pair = append(pair, fmt.Sprintf("%d,%d", res, v))
+		}
+	}
+	return pair
 }
