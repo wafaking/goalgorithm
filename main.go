@@ -2,45 +2,53 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
-	"os/signal"
 	"sync"
-	"syscall"
 	"time"
 )
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+	num := rand.Intn(1000)
+	// sli = []int{1, 3, 46, 5, 2, 10, 2, 31, 18, 24, 30, 12, 9, 4}
+	fmt.Println("s: ", num)
+}
 
 var wg sync.WaitGroup
 
 var ch1 = make(chan os.Signal, 0)
 
 func main() {
-	var stop = make(chan struct{}, 0)
+	/*
+		var stop = make(chan struct{}, 0)
 
-	var num1 = 5
-	var num2 = 5
+		var num1 = 5
+		var num2 = 5
 
-	wg.Add(num1 + num2)
-	for i := 0; i < num1; i++ {
+		wg.Add(num1 + num2)
+		for i := 0; i < num1; i++ {
+			go func() {
+				G1(&wg, stop)
+			}()
+		}
+
+		for i := 0; i < num2; i++ {
+			go func() {
+				G2(&wg, stop)
+			}()
+		}
+		go G3(&wg, stop)
+		go G4(&wg, stop)
+
 		go func() {
-			G1(&wg, stop)
+			signal.Notify(ch1, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM)
+			<-ch1
+			close(stop)
 		}()
-	}
 
-	for i := 0; i < num2; i++ {
-		go func() {
-			G2(&wg, stop)
-		}()
-	}
-	go G3(&wg, stop)
-	go G4(&wg, stop)
-
-	go func() {
-		signal.Notify(ch1, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM)
-		<-ch1
-		close(stop)
-	}()
-
-	wg.Wait()
+		wg.Wait()
+	*/
 }
 
 func G1(wg *sync.WaitGroup, ch chan struct{}) {
