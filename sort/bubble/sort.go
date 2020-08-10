@@ -1,4 +1,4 @@
-package sort
+package bubble
 
 import "fmt"
 
@@ -37,8 +37,8 @@ func BubbleSortStandardOptimize(sli []int) {
 	length := len(sli)
 
 	var flag = true // 设置标识位,默认为真
-	for i := 0; i < length && flag; i++ {
-		for j := length - 1; j > i; j-- {
+	for i := 1; i < length && flag; i++ {
+		for j := length - 1; j >= i; j-- {
 			flag = false
 			if sli[j] < sli[j-1] {
 				sli[j-1], sli[j] = sli[j], sli[j-1]
