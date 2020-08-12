@@ -9,10 +9,11 @@ import (
 )
 
 func GetArrayOfSize(n int) []int {
-	p, err := build.Default.Import("github.com/arnauddri/algorithms/algorithms/sorting/utils", "", build.FindOnly)
+	p, err := build.Default.Import("goalgorithm/sort/utils", "", build.FindOnly)
 
 	if err != nil {
 		// handle error
+		panic(err)
 	}
 	fname := filepath.Join(p.Dir, "IntegerArray.txt")
 	f, _ := os.Open(fname)
