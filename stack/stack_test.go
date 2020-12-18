@@ -24,5 +24,4 @@ func TestPMMD(t *testing.T) {
 	fmt.Println(rear)
 	result := rearCalculation(rear)
 	fmt.Println(result)
-
 }

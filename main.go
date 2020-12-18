@@ -1,14 +1,54 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+	"os"
+	"sync"
+	"time"
+)
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+	num := rand.Intn(1000)
+	// sli = []int{1, 3, 46, 5, 2, 10, 2, 31, 18, 24, 30, 12, 9, 4}
+	fmt.Println("s: ", num)
+}
+
+var wg sync.WaitGroup
+
+var ch1 = make(chan os.Signal, 0)
 
 func main() {
-	var sli = []int{1, 1, 4, 2, 5, 3, 2, 5, 3, 5, 4, 4, 5}
-	for i := 1; i < len(sli); i++ {
-		sli[0] = sli[0] ^ sli[i]
-		fmt.Println("sli[0]: ", sli[0])
-	}
-	fmt.Println("res: ", sli[0]) // 4
+	/*
+		var stop = make(chan struct{}, 0)
+
+		var num1 = 5
+		var num2 = 5
+
+		wg.Add(num1 + num2)
+		for i := 0; i < num1; i++ {
+			go func() {
+				G1(&wg, stop)
+			}()
+		}
+
+		for i := 0; i < num2; i++ {
+			go func() {
+				G2(&wg, stop)
+			}()
+		}
+		go G3(&wg, stop)
+		go G4(&wg, stop)
+
+		go func() {
+			signal.Notify(ch1, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM)
+			<-ch1
+			close(stop)
+		}()
+
+		wg.Wait()
+	*/
 }
 
     //求数组内所有数的异或运算值
