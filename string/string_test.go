@@ -2,6 +2,7 @@ package str
 
 import (
 	"fmt"
+	"log"
 	"testing"
 )
 
@@ -15,4 +16,10 @@ func TestReverseVowels(t *testing.T) {
 	// var s2 = "hello"
 	res := reverseVowels(s1)
 	fmt.Println("res: ", res)
+}
+
+func TestReplaceSpace(t *testing.T) {
+	s := "We are happy."
+	res := replaceSpace(s)
+	log.Println("res: ", res)
 }

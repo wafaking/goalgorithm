@@ -9,32 +9,29 @@ package list
 //你可以按任意顺序返回答案。
 //
 //示例 1：
-//
 //输入：nums = [2,7,11,15], target = 9
 //输出：[0,1]
 //解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1]。
+
 //示例 2：
-//
 //输入：nums = [3,2,4], target = 6
 //输出：[1,2]
+
 //示例 3：
-//
 //输入：nums = [3,3], target = 6
 //输出：[0,1]
 
 func twoSum(nums []int, target int) []int {
 	var m = make(map[int]int, len(nums))
-	for k, v := range nums {
-		m[v] = k
-	}
 
 	var res []int
 	for k, v := range nums {
 		diff := target - v
 		if i, ok := m[diff]; ok {
-			res = append(res, k, i)
+			res = append(res, i, k)
 			break
 		}
+		m[v] = k
 	}
 	return res
 }

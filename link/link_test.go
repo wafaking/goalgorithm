@@ -6,10 +6,17 @@ import (
 )
 
 func TestMain(t *testing.M) {
-	sli := []int{1, 2, 2, 3, 3, 4, 5}
-	SetListNode(sli)
-	PrintHead()
-	t.Run()
+
+	ssli := [][]int{
+		{1, 2, 2, 3, 3, 4, 5},
+		{8, 4, 0, 6, 5, 6, 5, 7},
+	}
+	for _, sli := range ssli {
+		SetListNode(sli)
+		PrintHead()
+		t.Run()
+	}
+
 }
 
 func TestPrintListNode(t *testing.T) {

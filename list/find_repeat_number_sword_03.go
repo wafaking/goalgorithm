@@ -1,5 +1,7 @@
 package list
 
+import "sort"
+
 //剑指 Offer 03. 数组中重复的数字
 //找出数组中重复的数字。
 
@@ -12,7 +14,71 @@ package list
 //[2, 3, 1, 0, 2, 5, 3]
 //输出：2 或 3
 
+//3. 使用原地置换
 func findRepeatNumber(nums []int) int {
+
+	for i, _ := range nums {
+		if i != nums[i] {
+			if nums[i] == nums[nums[i]] {
+				return nums[i]
+			}
+			nums[i], nums[nums[i]] = nums[nums[i]], nums[i]
+		}
+	}
+
+	return -1
+}
+
+// 4. 使用位数组
+func findRepeatNumber3(nums []int) int {
+	n := len(nums)
+	sli := make([]int, n, n)
+
+	for _, v := range nums {
+		if sli[v] > 0 {
+			return v
+		}
+		sli[v] = 1
+	}
+	return -1
+}
+
+func findRepeatNumber31(nums []int) int {
+	//特殊判断
+	if nums == nil || len(nums) == 0 {
+		return -1
+	}
+	for _, num := range nums {
+		if num < 0 || num > len(nums)-1 {
+			return -1
+		}
+	}
+
+	for i := 0; i < len(nums); i++ {
+		if i != nums[i] {
+			if nums[i] == nums[nums[i]] {
+				return nums[i]
+			}
+			// swap nums[i] and nums[nums[i]]
+			nums[i], nums[nums[i]] = nums[nums[i]], nums[i]
+		}
+	}
+	return -1
+}
+
+//2. 排序，对比相邻元素
+func findRepeatNumber2(nums []int) int {
+	sort.Ints(nums)
+	for i := 1; i < len(nums); i++ {
+		if nums[i] == nums[i-1] {
+			return nums[i-1]
+		}
+	}
+	return -1
+}
+
+// 1. 使用map
+func findRepeatNumber1(nums []int) int {
 	var mapNum = map[int]int{}
 	for _, v := range nums {
 		if _, ok := mapNum[v]; ok {
