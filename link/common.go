@@ -41,3 +41,37 @@ func PrintHead() {
 	log.Printf("*******NodeList: %#v ********\n", valSli)
 	fmt.Println("***********************************")
 }
+
+// 链表添加尾部元素
+func addTailNode(val int) {
+	if head == nil {
+		head = &ListNode{Val: val, Next: nil}
+		return
+	}
+
+	cur := head
+	for cur.Next != nil {
+		cur = cur.Next
+	}
+	cur.Next = &ListNode{Val: val}
+}
+
+func removeNode(val int) {
+	if head == nil {
+		return
+	}
+	if head.Val == val {
+		head = head.Next
+		return
+	}
+
+	cur := head
+	for cur.Next != nil {
+		if cur.Next.Val == val {
+			cur.Next = cur.Next.Next
+			return
+		}
+		cur = cur.Next
+	}
+	return
+}

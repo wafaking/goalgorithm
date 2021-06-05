@@ -12,7 +12,7 @@ import (
 //注意：答案中不可以包含重复的三元组。
 
 //示例 1：
-//输入：nums = [-1,0,1,2,-1,-4]  sort:  [-4 -1 -1 0 1 2]
+//输入：nums = [-1,0,1,2,-1,-4]
 //输出：[[-1,-1,2],[-1,0,1]]
 
 //示例 2：
@@ -25,19 +25,18 @@ import (
 
 func threeSum(nums []int) [][]int {
 	sort.Ints(nums) // 排序保证a<=b<=c
-	log.Println("nums: ", nums)
+	//log.Println("nums: ", nums)
 	length := len(nums)
 	res := make([][]int, 0)
 
-	// 枚举 a
+	// 枚举第一个指针
 	for first := 0; first < length; first++ {
 		// 保证枚举的和上一次的不同，此处要注意a要从第二个数开始
 		if first > 0 && nums[first] == nums[first-1] {
 			continue
 		}
-		log.Println("first: ---: ", nums[first])
 
-		// 枚举b
+		// 枚举第二个指针
 		for second := first + 1; second < length; second++ {
 			if second > first+1 && nums[second] == nums[second-1] {
 				continue
@@ -45,7 +44,6 @@ func threeSum(nums []int) [][]int {
 
 			target := -1 * nums[first] // 取对等反向值
 			third := length - 1        // c 对应的指针初始指向数组的最右端
-			log.Println("second: ******: ", nums[second], nums[third])
 
 			for second < third && nums[second]+nums[third] > target { // 大了，将第三个数的指针向前移
 				//log.Println("second: ******: ", nums[second], nums[third], target)

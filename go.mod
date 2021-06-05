@@ -1,6 +1,6 @@
 module github.com/wafaking/goalgorithm
 
-go 1.12
+go 1.14
 
 require (
 	github.com/apache/arrow/go/arrow v0.0.0-20200808210713-40ac6e35346b // indirect

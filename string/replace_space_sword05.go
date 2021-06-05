@@ -12,13 +12,16 @@ import (
 //输入：s = "We are happy."
 //输出："We%20are%20happy."
 
-func replaceSpace(s string) string {
+func replaceSpace1(s string) string {
 	var count int
 	// 获取空格的个数
 	for _, v := range s {
 		if unicode.IsSpace(v) {
 			count++
 		}
+	}
+	if 0 == count {
+		return s
 	}
 
 	str := &strings.Builder{}
@@ -31,5 +34,30 @@ func replaceSpace(s string) string {
 		}
 		str.WriteByte(s[i])
 	}
+	return str.String()
+}
+
+func replaceSpace(s string) string {
+	var count int
+	for _, v := range s {
+		if v == ' ' {
+			count++
+		}
+	}
+	if count == 0 {
+		return s
+	}
+
+	var str = strings.Builder{}
+	// 预分配内存, 如果是字符串长度可变，在原s基础上修改s，则可以倒序遍历s，减少移动
+	str.Grow(len(s) + 2*count)
+	for _, v := range s {
+		if unicode.IsSpace(v) {
+			str.WriteString("%20")
+		} else {
+			str.WriteRune(v)
+		}
+	}
+
 	return str.String()
 }

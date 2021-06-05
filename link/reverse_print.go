@@ -2,7 +2,6 @@ package link
 
 import (
 	"fmt"
-	"log"
 )
 
 //剑指 Offer 06. 从尾到头打印链表
@@ -19,7 +18,6 @@ func reversePrint1(head *ListNode) []int {
 	for dummy != nil {
 		sli = append(sli, dummy.Val)
 		dummy = dummy.Next
-
 	}
 
 	if len(sli) <= 1 {
@@ -32,24 +30,21 @@ func reversePrint1(head *ListNode) []int {
 	return sli
 }
 
-//*************有问题**********
 //法二：优化法一,使用defer打印
 func reversePrint2(head *ListNode) (sli []int) {
-	//sli := []int{}
 	dummy := head
 	for dummy != nil {
-		log.Println("-----: ", dummy.Val)
+		val := dummy.Val
 		defer func() {
-			sli = append(sli, dummy.Val)
+			//sli = append(sli, dummy.Val) // 错误写法
+			sli = append(sli, val)
 		}()
 		dummy = dummy.Next
 	}
 	return sli
 }
 
-//*************有问题**********
-
-//法二：优化法一,使用defer打印
+//法三：优化法一,使用defer打印(此方法会改变head，不推荐)
 func reversePrint3(head *ListNode) (res []int) {
 	for head != nil {
 		temp := head
@@ -58,6 +53,7 @@ func reversePrint3(head *ListNode) (res []int) {
 		}()
 		head = head.Next
 	}
+	fmt.Printf("head: %#v\n", head)
 	return
 }
 

@@ -5,7 +5,7 @@ package link
 */
 
 type SqSingleListOPeration interface {
-	InitList() *SingleLink              // 初始化
+	//InitList() *SingleLink              // 初始化
 	IsEmpty() bool                      // 判断是否为空,true/false
 	Length() int                        // 长度
 	ClearList()                         // 清空
@@ -18,6 +18,7 @@ type SqSingleListOPeration interface {
 	CreateSingleList(length int)        // 创建一个指定长度的随机单链表
 }
 
+/*
 // Node 单结构
 type Node struct {
 	Next *Node
@@ -168,3 +169,6 @@ func (sq *SingleLink) LocateElem(node Node) int {
 	}
 	return index
 }
+
+
+*/
