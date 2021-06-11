@@ -93,7 +93,7 @@ func permutation3(s string) []string {
 func permutation4(s string) []string {
 	res := make(map[string]bool)
 	c := []byte(s)
-	fmt.Println("first : -----: ", string(c))
+	fmt.Println("first : -----: ", c)
 	dfs(res, c, 0)
 	RES := []string{}
 	fmt.Printf("res: %#v\n", res)
@@ -114,6 +114,7 @@ func dfs(res map[string]bool, c []byte, i int) {
 			fmt.Println("----------: ", i, j, string(c))
 			dfs(res, c, i+1)
 			c[i], c[j] = c[j], c[i]
+			fmt.Println("---111-------: ", i, j, string(c))
 		}
 	}
 }

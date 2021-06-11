@@ -46,3 +46,8 @@ func TestPermutation(t *testing.T) {
 	res := permutation4("abc")
 	log.Println("res: ", res)
 }
+
+func TestCheckInclusion(t *testing.T) {
+	res := checkInclusion("ab", "eidbaooo")
+	log.Println("res: ", res)
+}

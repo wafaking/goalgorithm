@@ -106,3 +106,8 @@ func TestMerge(t *testing.T) {
 	}
 
 }
+
+func TestTotalDestinationPath(t *testing.T) {
+	res := TotalDestinationPath(1, 1)
+	log.Println("res: ", res)
+}
