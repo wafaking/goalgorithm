@@ -1,32 +1,65 @@
 package main
 
 import (
+	"crypto/md5"
 	"fmt"
+	"log"
+	"math/rand"
+	"strings"
 	"sync"
+	"time"
+
+	"github.com/satori/uuid"
 )
 
-//使用channel 来模拟生产者和消费者:
-//1个producer, 3 个 consumer.
-//生产者生产 n 个数据(int即可)后结束, 消费者消费完所有数据后也结束(打印即算消费).
-//要求:
-//1. 编译运行通过, 且程序正常退出.
-//2. 消费者必须消费完所有数据
+type Person struct {
+	Name string
+	Age  int
+	Attr *Student
+}
+
+type Student struct {
+	Addr string
+	Name string
+}
+
 func main() {
-	var conNum = 3
-	var ch = make(chan int, 20)
-	var wg sync.WaitGroup
+	GenUUid()
+}
 
-	wg.Add(1)
-	go producer(ch, &wg)
+func GenUUid() {
+	uid := uuid.NewV4()
 
-	wg.Add(conNum)
-	for i := 0; i < conNum; i++ {
-		go func() {
-			defer wg.Done()
-			consumer(ch)
-		}()
+	traceID := fmt.Sprintf("%s-%s", time.Now().Format("20060102"), strings.Replace(uid.String(), "-", "", -1))
+
+	h := md5.New()
+	md5 := h.Sum([]byte("wafa"))
+	r := fmt.Sprintf("md5: %x", md5)
+	fmt.Printf("md5: %s, %d\n", r, len(r))
+
+	uuids := uuid.NewV3(uid, "wafa")
+	log.Println("uuid: ", traceID, len(traceID), uid, uuids.String())
+	u2, err := uuid.FromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8")
+	if err != nil {
+		fmt.Printf("Something went wrong: %s", err)
+		return
 	}
-	wg.Wait()
+	u2s := strings.Replace(u2.String(), "-", "", -1)
+	fmt.Println("Successfully parsed: ", u2, u2s, len(u2s))
+
+}
+
+func GenerateRandomStr(length int) string {
+	str := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	rand.Seed(time.Now().UnixNano())
+
+	b := []byte(str)
+	var res []byte
+	for i := 0; i < length; i++ {
+		val := b[rand.Intn(len(str)-1)]
+		res = append(res, val)
+	}
+	return string(res)
 }
 
 func producer(ch chan int, wg *sync.WaitGroup) {

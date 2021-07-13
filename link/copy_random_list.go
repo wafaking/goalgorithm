@@ -1,111 +1,104 @@
 package link
 
+// 复杂链表的复制(剑指 Offer 35)
+// 请实现copyRandomList函数，复制一个复杂链表。
+//在复杂链表中，每个节点除了有一个next指针指向下一个节点，还有一个random指针指向链表中的任意节点或者null。
+
 type Node struct {
 	Val    int
 	Next   *Node
 	Random *Node
 }
 
-// 法一：
-//func copyRandomList(head *Node) *Node {
-//	return nil
-//}
-func copyRandomListM(head *Node) *Node {
-	if head == nil {
-		return nil
-	}
-	newHead := Node{
-		Val:    head.Val,
-		Next:   nil,
-		Random: nil,
-	}
-	p := head.Next
-	pre := &newHead
-	for p != nil {
-		newNode := &Node{
-			Val:    p.Val,
-			Next:   nil,
-			Random: nil,
-		}
-		pre.Next = newNode
-		p = p.Next
-		pre = pre.Next
-	}
-	p = head
-	newP := &newHead
-	for p != nil {
-		if p.Random != nil {
-			step := findStep(head, p.Random)
-			newP.Random = target(&newHead, step)
-		}
-		p = p.Next
-		newP = newP.Next
-	}
-	return &newHead
-}
-
-//确定从头结点到目标节点所经过的节点数
-func findStep(head, target *Node) int {
-	p := head
-	step := 0
-	for p != target {
-		p = p.Next
-		step++
-	}
-	return step
-}
-
-//返回从头结点开始，走step步所到达的节点
-func target(head *Node, step int) *Node {
-	p := head
-	for step > 0 {
-		p = p.Next
-		step--
-	}
-	return p
-}
-
-func copyRandomListN(head *Node) *Node {
-	if head == nil {
-		return nil
-	}
-	newHead := Node{
-		Val:    head.Val,
-		Next:   nil,
-		Random: nil,
-	}
-	p := head.Next
-	pre := &newHead
-	connection := make(map[*Node]*Node)
-	connection[head] = pre
-
-	for p != nil {
-		newNode := &Node{
-			Val:    p.Val,
-			Next:   nil,
-			Random: nil,
-		}
-		pre.Next = newNode
-		connection[p] = newNode
-		p = p.Next
-		pre = pre.Next
-	}
-
-	p = head
-	newP := &newHead
-	for p != nil {
-		if p.Random != nil {
-			newP.Random = connection[p.Random]
-		}
-		p = p.Next
-		newP = newP.Next
-	}
-	return &newHead
-}
-
-// 法二：
+// 法一：遍历(先生成链表，再遍历节点，根据Random节点所在位置赋值给新的Random)
 func copyRandomList(head *Node) *Node {
-	return nil
+	if head == nil {
+		return head
+	}
+	// 1. 先生成新链表主节点
+	cur := head
+	newHead := &Node{Val: cur.Val}
+	newCur := newHead
+
+	for cur.Next != nil {
+		node := &Node{Val: cur.Next.Val}
+		newCur.Next = node
+
+		cur = cur.Next
+		newCur = newCur.Next
+	}
+
+	// 2. 找出原链表节点所指的Random节点的位置，再赋值给新链表的Random节点
+	cur = head // 此处要从头开始，上次遍历已将cur移动到了最后位置
+	newCur = newHead
+	for cur != nil {
+		if cur.Random != nil {
+			// 1. 取出Random的位置
+			position := GetRandomPosition(head, cur.Random)
+			// 2. 根据位置获取新节点的值
+			newCur.Random = SetRandomByPosition(newHead, position)
+		}
+		cur = cur.Next
+		newCur = newCur.Next
+	}
+
+	return newHead
+}
+
+func GetRandomPosition(head, random *Node) int {
+	cur := head
+	position := 0
+	for cur != random {
+		position++
+		cur = cur.Next
+	}
+	return position
+}
+
+func SetRandomByPosition(head *Node, position int) *Node {
+	cur := head
+	for position > 0 {
+		cur = cur.Next
+		position--
+	}
+	return cur
+}
+
+// 法二：使用map记录
+// 注：使用老的A节点映射新的节点A1
+func copyRandomList2(head *Node) *Node {
+	// 1. 第一次遍历，生成新的链表，并将旧、新节点映射
+	if head == nil {
+		return head
+	}
+
+	mapLink := map[*Node]*Node{}
+	cur := head
+	NewHead := &Node{Val: head.Val} // 新链表头节点
+	newCur := NewHead
+	mapLink[cur] = newCur // 老、新关系映射
+
+	for cur.Next != nil {
+		newNode := &Node{Val: cur.Next.Val}
+		newCur.Next = newNode
+		mapLink[cur.Next] = newNode
+
+		newCur = newCur.Next
+		cur = cur.Next
+	}
+
+	// 2. 更新新节点的Random节点
+	cur = head       // 此片要从头开始，上次遍历已将cur移动到了最后位置
+	newCur = NewHead // 同上
+	for cur != nil {
+		if cur.Random != nil {
+			newCur.Random = mapLink[cur.Random]
+		}
+		newCur = newCur.Next
+		cur = cur.Next
+	}
+
+	return NewHead
 }
 
 // 法三：在每个节点后添加一个新节点，再复制随机节点，最后再拆分奇偶节点

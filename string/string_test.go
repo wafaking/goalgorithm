@@ -51,3 +51,16 @@ func TestCheckInclusion(t *testing.T) {
 	res := checkInclusion("ab", "eidbaooo")
 	log.Println("res: ", res)
 }
+
+func TestRemoveKdigits(t *testing.T) {
+	sli := map[string]int{
+		//"1432219": 3,
+		//"10200":   1,
+		//"10":      2,
+		"10001": 4,
+	}
+	for str, k := range sli {
+		res := removeKdigits(str, k)
+		log.Printf("res---- str:%s, k: %d, res: %s\n", str, k, res)
+	}
+}
